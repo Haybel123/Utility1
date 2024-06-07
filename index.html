@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Utility Tools</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #07337c;
+            color: white;
+            padding: 1em 0;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        section {
+            background-color: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input, select, button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 1em;
+        }
+
+        button {
+            background-color: #5720a9;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #044f4c;
+            color: white;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Utility Tools</h1>
+    </header>
+
+    <main>
+        <section id="temperature-converter">
+            <h2>Temperature Converter</h2>
+            <input type="number" id="temp-input" placeholder="Enter temperature">
+            <select id="temp-unit">
+                <option value="C">Celsius</option>
+                <option value="F">Fahrenheit</option>
+                <option value="K">Kelvin</option>
+            </select>
+            <button onclick="convertTemperature()">Convert</button>
+            <p id="temp-result"></p>
+        </section>
+
+        <section id="bmi-calculator">
+            <h2>BMI Calculator</h2>
+            <input type="number" id="weight" placeholder="Enter weight in kg">
+            <input type="number" id="height" placeholder="Enter height in cm">
+            <select id="sex">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+            <button onclick="calculateBMI()">Calculate BMI</button>
+            <p id="bmi-result"></p>
+        </section>
+
+        <section id="sound-intensity-calculator">
+            <h2>Sound Intensity Calculator</h2>
+            <input type="number" id="power" placeholder="Enter power in watts">
+            <input type="number" id="area" placeholder="Enter area in square meters">
+            <button onclick="calculateSoundIntensity()">Calculate Intensity</button>
+            <p id="intensity-result"></p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Utility Tools</p>
+    </footer>
+
+    <script>
+        function convertTemperature() {
+            const tempInput = parseFloat(document.getElementById('temp-input').value);
+            const tempUnit = document.getElementById('temp-unit').value;
+            let result = '';
+
+            if (isNaN(tempInput)) {
+                result = 'Please enter a valid temperature.';
+            } else {
+                switch (tempUnit) {
+                    case 'C':
+                        result = `${tempInput}°C = ${(tempInput * 9/5 + 32).toFixed(2)}°F = ${(tempInput + 273.15).toFixed(2)}K`;
+                        break;
+                    case 'F':
+                        result = `${tempInput}°F = ${((tempInput - 32) * 5/9).toFixed(2)}°C = ${(((tempInput - 32) * 5/9) + 273.15).toFixed(2)}K`;
+                        break;
+                    case 'K':
+                        result = `${tempInput}K = ${(tempInput - 273.15).toFixed(2)}°C = ${((tempInput - 273.15) * 9/5 + 32).toFixed(2)}°F`;
+                        break;
+                    default:
+                        result = 'Please select a valid temperature unit.';
+                        break;
+                }
+            }
+
+            document.getElementById('temp-result').innerText = result;
+        }
+
+        function calculateBMI() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value) / 100;
+            const sex = document.getElementById('sex').value;
+            let bmi = weight / (height * height);
+            let resultText = '';
+            let advice = '';
+
+            if (isNaN(weight) || isNaN(height)) {
+                resultText = 'Please enter valid weight and height.';
+            } else {
+                if (bmi < 18.5) {
+                    resultText = 'Underweight';
+                    advice = 'Consider gaining some weight for a healthier body.';
+                } else if (bmi < 24.9) {
+                    resultText = 'Normal weight';
+                    advice = 'Great job! Maintain your current lifestyle.';
+                } else if (bmi < 29.9) {
+                    resultText = 'Overweight';
+                    advice = 'Consider losing some weight for better health.';
+                } else {
+                    resultText = 'Obesity';
+                    advice = 'It is advisable to seek help for weight loss for better health.';
+                }
+                
+                if (sex === 'male') {
+                    advice += ' A balanced diet and regular exercise can help.';
+                } else if (sex === 'female') {
+                    advice += ' Ensure you have a balanced diet and consider consulting a nutritionist.';
+                }
+
+                document.getElementById('bmi-result').innerText = `Your BMI is ${bmi.toFixed(2)} (${resultText}). ${advice}`;
+            }
+        }
+
+        function calculateSoundIntensity() {
+            const power = parseFloat(document.getElementById('power').value);
+            const area = parseFloat(document.getElementById('area').value);
+            let result = '';
+
+            if (isNaN(power) || isNaN(area) || area <= 0) {
+                result = 'Please enter valid power and area.';
+            } else {
+                const intensity = power / area;
+                result = `The sound intensity is ${intensity.toFixed(2)} W/m².`;
+            }
+
+            document.getElementById('intensity-result').innerText = result;
+        }
+    </script>
+</body>
+</html>
